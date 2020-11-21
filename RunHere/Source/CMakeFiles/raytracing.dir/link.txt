@@ -1,0 +1,2 @@
+/usr/bin/ar qc libraytracing.a  CMakeFiles/raytracing.dir/camera.cpp.o CMakeFiles/raytracing.dir/draw.cpp.o CMakeFiles/raytracing.dir/hit.cpp.o CMakeFiles/raytracing.dir/image.cpp.o CMakeFiles/raytracing.dir/rand.cpp.o CMakeFiles/raytracing.dir/ray.cpp.o CMakeFiles/raytracing.dir/shapes.cpp.o CMakeFiles/raytracing.dir/sky.cpp.o CMakeFiles/raytracing.dir/texture.cpp.o CMakeFiles/raytracing.dir/vec.cpp.o
+/usr/bin/ranlib libraytracing.a

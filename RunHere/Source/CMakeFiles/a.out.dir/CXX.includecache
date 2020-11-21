@@ -1,0 +1,102 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/camera.h
+hit.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/hit.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/draw.h
+thread
+-
+errno.h
+-
+../Header/image.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/image.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/enum.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/hit.h
+texture.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/texture.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/image.h
+string
+-
+camera.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/camera.h
+sky.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/sky.h
+shapes.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/shapes.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/rand.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/ray.h
+vec.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/vec.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/shapes.h
+hit.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/hit.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/sky.h
+ray.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/ray.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/texture.h
+ray.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/ray.h
+enum.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/enum.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/vec.h
+iostream
+-
+fstream
+-
+sstream
+-
+math.h
+-
+algorithm
+-
+stdio.h
+-
+memory
+-
+vector
+-
+string
+-
+unistd.h
+-
+rand.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/rand.h
+
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Source/makepictures.cpp
+utility
+-
+tuple
+-
+stdlib.h
+-
+termios.h
+-
+fcntl.h
+-
+iostream
+-
+unistd.h
+-
+math.h
+-
+sstream
+-
+../Header/draw.h
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/Header/draw.h
+

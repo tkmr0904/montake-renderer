@@ -1,0 +1,6 @@
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/CMakeFiles/rebuild_cache.dir
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/CMakeFiles/edit_cache.dir
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/Source/CMakeFiles/rebuild_cache.dir
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/Source/CMakeFiles/edit_cache.dir
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/Source/CMakeFiles/raytracing.dir
+/home/ryuto/shared with xubuntu/raytracing-53 (copy 1) (copy 1)/RunHere/Source/CMakeFiles/a.out.dir
