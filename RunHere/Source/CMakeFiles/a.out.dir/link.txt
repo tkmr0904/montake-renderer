@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -O3 -pthread  -rdynamic CMakeFiles/a.out.dir/makepictures.cpp.o  -o a.out libraytracing.a 
