@@ -194,7 +194,7 @@ int main(int argc,char *argv[])
                     );
     /***********************************************************************/
 
-    for(int i = 0; i <= 0; i++)//複数画像を描画する
+    for(int i = 0; i <= 359; i++)//複数画像を描画する
     {
         
 
@@ -209,7 +209,7 @@ int main(int argc,char *argv[])
             int height;
             int s;
 
-            s = 1;
+            s = 5;
 
             switch(s)//画像の縦, 横を決める
             {
@@ -234,26 +234,31 @@ int main(int argc,char *argv[])
                 break;
 
                 case 5:
+                width = 30;
+                height = 53;
+                break;
+
+                case 6:
                 width = 1366;
                 height = 768;
                 break;
 
-                case 6:
+                case 7:
                 width = 683;
                 height = 384;
                 break;
 
-                case 7:
+                case 8:
                 width = 1000;
                 height = 1000;
                 break;
 
-                case 8:
+                case 9:
                 width = 100;
                 height = 100;
                 break;
 
-                case 9:
+                case 10:
                 width = 200;
                 height = 100;
                 break;
