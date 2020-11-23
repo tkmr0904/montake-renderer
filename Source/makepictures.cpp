@@ -234,8 +234,8 @@ int main(int argc,char *argv[])
                 break;
 
                 case 5:
-                width = 30;
-                height = 53;
+                width = 60;
+                height = 106;
                 break;
 
                 case 6:
