@@ -1429,7 +1429,7 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
         std::cout << "▲書き込み終了▲" << std::endl; //表示
     }
 
-    void Image::writeSD_to_ppm(std::__cxx11::string const& name, int const& num) const//numが0, 1, 2の場合それぞれx, y, zを表す
+    void Image::writeSD_to_ppm(std::string const& name, int const& num) const//numが0, 1, 2の場合それぞれx, y, zを表す
     {
 
         if((num != 0) && (num != 1) && (num != 2))
