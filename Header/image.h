@@ -2,7 +2,7 @@
 #define IMAGE_H
 
 #include <string>
-#define threadsum 7
+#define threadsum 4
 
 #include "camera.h"
 #include "sky.h"
@@ -74,7 +74,7 @@ class Image
     void CalculateSD_average      (double               const& a_                    ) const;
     void CalculateSD_each1        (double               const& a_                    ) const;
     void OutputSD_To_Ppm          (int                  const& i                     ) const;
-    void writeSD_to_ppm           (std::__cxx11::string const& name  , int const& num) const;
+    void writeSD_to_ppm           (std::string const& name  , int const& num) const;
     void setNumber_of_samples_each(bool                 const& abc                   );
     double getpercent             ()                                                   const;
     void printpercent             ()                                                   const;

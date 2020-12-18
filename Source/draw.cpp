@@ -82,8 +82,8 @@ void draw(int const& i, Image& image, Camera const& camera, Sky const& sky, Obje
 
         if(auto_ == 1)
         {
-            sample_auto = 1;
-            auto_c = 2.5;
+            sample_auto = 4;
+            auto_c = 3.3;
 
             std::cout << "オートサンプル数は" << sample_auto << std::endl;
             std::cout << "オートの明るさ倍数は" << auto_c << std::endl;
