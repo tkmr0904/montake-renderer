@@ -1,5 +1,6 @@
 #include "../Header/image.h"
 
+using namespace std::literals::string_literals;
 
 void hour_mimnute_second(double const& seconds, int& hour, int& minute, double& second)//第1引数の秒数から 何時間(整数), 何分(整数), 何秒(小数), をhour, minute, second に代入する
 {

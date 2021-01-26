@@ -1,5 +1,7 @@
 #include"../Header/texture.h"
 
+using namespace std::literals::string_literals;
+
 /**************************ppmファイル(画像)の読み込みに関する処理***********************************************************************/
     int nexttoken(std::ifstream& file, unsigned char c[], int arraynum)//戻り値は文字数 見つからなかった場合は0
     {
