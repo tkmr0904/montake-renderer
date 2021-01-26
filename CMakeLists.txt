@@ -1,5 +1,5 @@
 # CMakeのバージョンを設定
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.18)
 # プロジェクト名と使用する言語を設定
 project(raytracing CXX)
 

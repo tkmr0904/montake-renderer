@@ -1,3 +1,5 @@
+set(FileName a.out)
+
 add_library(raytracing
   STATIC
     camera.cpp
@@ -12,9 +14,8 @@ add_library(raytracing
     vec.cpp
   )
 
-  target_include_directories(raytracing
-  PUBLIC ${PROJECT_SOURCE_DIR}/Header
-  )
-add_executable(a.out makepictures.cpp)
-# a.outをコンパイルする際にraytracingをリンクする
-target_link_libraries(a.out raytracing)
+  find_package( OpenCV REQUIRED ) 
+
+  include_directories( ${OpenCV_INCLUDE_DIRS})
+  add_executable(${FileName} makepictures.cpp)
+  target_link_libraries( ${FileName} ${OpenCV_LIBS} raytracing)
