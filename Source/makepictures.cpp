@@ -7,10 +7,12 @@
 #include <unistd.h>
 #include <math.h>
 #include <sstream>
+#include <opencv2/opencv.hpp>
 #include "../Header/draw.h"
 
 
 
+cv::Mat img, dst;
 
 template <typename a> std::string arrayn(a out[], int const& num_array)
 {
@@ -159,9 +161,11 @@ void setobjects(Objects& objects)//物体の情報をobjectsに書き込む
 
 
     /*****************物体を設定してobjectsに格納*******************************************************************************/
-        objects.addshape(share(Cuboid, Cuboid(200,200,200, Vec3(0,0,0), 0,0,0, r2, r2, r2, r2, r2, r2, q4, q4, q3, q3, q2, q13)));
-        objects.addshape_nee(share(Disk, Disk(20, Vec3(0,0,100-exp10(-10)), M_PI*0, M_PI*1, M_PI*0,  r1, q1)));
-        //objects.addshape(share(Disk, Disk(60, Vec3(0,0,0), M_PI*0, M_PI*0, M_PI*0,  r2, q20)));
+        objects.addshape(share(Cuboid, Cuboid(200,200,200, Vec3(0,0,0), 0,0,0, r2, r2, r2, r2, r2, r2, q4, q4, q3, q3, q14, q13)));
+        objects.addshape_nee(share(Disk, Disk(20, Vec3(0,0,100+3), M_PI*0, M_PI*1, M_PI*0,  r1, q1)));
+        objects.addshape(share(Pipe, Pipe(20, Vec3(0,0,100), Vec3(0,0,3), 0, r2, q2)));
+        objects.addshape(share(Pipe, Pipe(20, Vec3(100,0,50), Vec3(-3,0,0), 0, r2, q2)));
+        objects.addshape(share(Disk, Disk(20, Vec3(100-3,0,50), M_PI*1, M_PI*0.5, M_PI*0,  r2, q2)));
     objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(0, 30*2/sqrt(3),-70), r2, q10)));
     objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(-30,-30  /sqrt(3),-70), r2, q10)));
     objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(30,-30  /sqrt(3),-70), r2, q10)));
@@ -194,14 +198,14 @@ int main(int argc,char *argv[])
                     );
     /***********************************************************************/
 
-    for(int i = 0; i <= 0/*359*/; i++)//複数画像を描画する
+    for(int i = 0; i <= 0; i++)//複数画像を描画する
     {
         
 
         std::cout << ("\033[1;33m---------------------------------------------------------------------------------------------------------\n---------------------------------------------------------------------------------------------------------\n \033[m");
 
         /***自動でループを回すか******/
-            bool auto_ = 1;
+            bool auto_ = 0;
         /**************************/
 
         /*****************************imageの設定***************************************************************************/
@@ -274,8 +278,8 @@ int main(int argc,char *argv[])
             bool ifnee;
             bool ifeye;
             bool iflight;
-            int p_eye_1_num = 8;  //サブパスで無限遠の点が生成されないにならない限り絶対にこの個数まで点が延長される
-            int p_light_1_num =8;//サブパスで無限遠の点が生成されないにならない限り絶対にこの個数まで点が延長される
+            int p_eye_1_num = 4;  //サブパスで無限遠の点が生成されないにならない限り絶対にこの個数まで点が延長される
+            int p_light_1_num =4;//サブパスで無限遠の点が生成されないにならない限り絶対にこの個数まで点が延長される
 
             s = 1;
 
@@ -313,12 +317,12 @@ int main(int argc,char *argv[])
 
         /*******************************************カメラを設定する***********************************************************************************************/
             double holedistance = 1.44;//0.54;
-            double distance = 105;//135;
+            double distance = 105-3;//135;
 
             //最初はカメラから見たとき   前がz軸(ワールド座標)の正の方向, 右がx軸(ワールド座標)の正の方向, 下がy軸(ワールド座標)の正の方向 であるとする   y軸方向の正の向きにを向きながらxy平面上に立って真上を向くイメージ
             //これからalpha, theta, phiで回転する
             double alpha = 0.5*M_PI;                      //x軸方向の負の向きに立って真上を向くイメージ
-            double theta = (0.62)*M_PI; // (0.52)*M_PI;   //x軸方向に背中を向け, x軸の正の方向に体を反らすイメージ
+            double theta = (0.62-0.04)*M_PI; // (0.52)*M_PI;   //x軸方向に背中を向け, x軸の正の方向に体を反らすイメージ
             double phi   = (2.0*i/360)*M_PI;    //(1.2)*M_PI;      //極座標のphiの方向に背中を向け, 体を真後ろに反らすイメージ
 
             double ratio = 1/80.0;//レンズの倍率
