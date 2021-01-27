@@ -7,12 +7,10 @@
 #include <unistd.h>
 #include <math.h>
 #include <sstream>
-#include <opencv2/opencv.hpp>
 #include "../Header/draw.h"
 
 
 
-cv::Mat img, dst;
 
 template <typename a> std::string arrayn(a out[], int const& num_array)
 {
@@ -29,6 +27,46 @@ template <typename a> std::string arrayn(a out[], int const& num_array)
     
     return stream.str();
 }
+
+/*******************ファイル内の文字の塊を読み込む処理******************************************************/
+    int nexttoken(std::ifstream& file, unsigned char c[], int arraynum)//戻り値は文字数 見つからなかった場合は0
+    {
+        int i;
+
+
+        while(1)//見つからない限り続ける
+        {
+            file.read(reinterpret_cast<char*>(c), 1);//読み込む
+
+            if(file.eof() == 1)//ファイル終端の1つ先を読み込んだ
+            {
+                return 0;//見つからなかった
+            }
+            else if((c[0] != ' ') && (c[0] != '\n'))//ファイル内のデータを読み込んで文字は改行空白以外の文字だった
+            {
+                break;//見つかった 
+            }
+        }
+
+
+        //見つかった場合
+        
+
+        for(i = 1; i < arraynum; i++)//何個先まで格納されているか調べる
+        {
+
+            file.read(reinterpret_cast<char*>(c+i), 1);//読み込む
+            if((c[i] == ' ') || (c[i] == '\n'))//文字は改行か空白だった
+            {
+                c[i] = '\0';
+                return i;//i個の文字列を発見した
+            }
+        }
+        //配列の全てが改行空白以外の文字で埋まった
+        std::cout << "配列が短すぎる" << std::endl;
+        exit(1);
+    }
+/*****************************************************************************************************/
 
 /******************様々な型を任意の個数表示できるようにする****************************************/
     void p()//これがないとコンパイラが危ないと判断するらしい(restの要素数が0でp(rest...)が実行されるとfirstに値が渡されない)
@@ -148,7 +186,7 @@ void setobjects(Objects& objects)//物体の情報をobjectsに書き込む
         M::sharePattern q18 =  M::pColorful_sphere();
         //M::sharePattern q19 =  M::pPicture_sphere("../Photo/moon2.ppm");
         //M::sharePattern q20 = share(M::Picture_disk, M::Picture_disk("../Photo/clock.ppm"));
-        //M::sharePattern q21 =  M::pPicture_rectangle("../Photo/a.ppm");
+        M::sharePattern q21 =  M::pPicture_rectangle("../Photo/a.ppm");
     /***************************************************************************************/
 
 
@@ -161,7 +199,7 @@ void setobjects(Objects& objects)//物体の情報をobjectsに書き込む
 
 
     /*****************物体を設定してobjectsに格納*******************************************************************************/
-        objects.addshape(share(Cuboid, Cuboid(200,200,200, Vec3(0,0,0), 0,0,0, r2, r2, r2, r2, r2, r2, q4, q4, q3, q3, q14, q13)));
+        objects.addshape(share(Cuboid, Cuboid(200,200,200, Vec3(0,0,0), 0,0,0, r2, r2, r2, r2, r2, r2, q4, q4, q3, q3, q14, q21)));
         objects.addshape_nee(share(Disk, Disk(20, Vec3(0,0,100+3), M_PI*0, M_PI*1, M_PI*0,  r1, q1)));
         objects.addshape(share(Pipe, Pipe(20, Vec3(0,0,100), Vec3(0,0,3), 0, r2, q2)));
         objects.addshape(share(Pipe, Pipe(20, Vec3(100,0,50), Vec3(-3,0,0), 0, r2, q2)));

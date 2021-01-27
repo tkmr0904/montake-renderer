@@ -6,9 +6,7 @@
 #include "enum.h"
 
 /**************************ppmファイル(画像)の読み込みに関する処理***********************************************************************/
-    int  nexttoken (std::ifstream     & file, unsigned char c[], int arraynum);
-    void loadppm_P6(std::ifstream     & file, int   & imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color);
-    void loadppm   (std::string   const str , int& mode, int& imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color);
+    void loadppm   (std::string   const str , int& imagewidth, int& imageheight,  std::shared_ptr<Vec3[]>& color, int& channel, int& depth);
 /******************************************************************************************************************************/
 
 //MaterialとLightでPatternの名前が衝突してしまうのでnamespaceで分ける
@@ -207,11 +205,11 @@ namespace M     //MaterialのM
                     public:
 
                     const std::string str;//colorに読み込まれた画像のファイル名
-                    int mode;
                     int imagewidth;
                     int imageheight;
-                    int maxbrightness;
                     std::shared_ptr<Vec3[]> color;
+                    int channel;
+                    int depth;
 
                     Picture_sphere(const std::string str);
 
@@ -224,11 +222,11 @@ namespace M     //MaterialのM
                     public:
 
                     const std::string str;
-                    int mode;
                     int imagewidth;
                     int imageheight;
-                    int maxbrightness;
                     std::shared_ptr<Vec3[]> color;
+                    int channel;
+                    int depth;                    
 
                     Picture_pipe(const std::string str);
 
@@ -241,11 +239,11 @@ namespace M     //MaterialのM
                     public:
 
                     const std::string str;
-                    int mode;
                     int imagewidth;
                     int imageheight;
-                    int maxbrightness;
                     std::shared_ptr<Vec3[]> color;
+                    int channel;
+                    int depth;                    
 
                     Picture_disk(const std::string str);
 
@@ -258,11 +256,11 @@ namespace M     //MaterialのM
                     public:
 
                     const std::string str;
-                    int mode;
                     int imagewidth;
                     int imageheight;
-                    int maxbrightness;
                     std::shared_ptr<Vec3[]> color;
+                    int channel;
+                    int depth;                    
 
                     Picture_rectangle(const std::string str);
 
