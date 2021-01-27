@@ -1,8 +1,8 @@
 #include <string>
 #include <fcntl.h>
 #include <termios.h>
+#include <sstream>
 #include "../Header/vec.h"
-
 
 template <typename a> std::string arrayn(a out[], int const& num_array)
 {
@@ -58,7 +58,9 @@ template <typename a> std::string arrayn(a out[], int const& num_array)
         std::cout << "配列が短すぎる" << std::endl;
         exit(1);
     }
+/*****************************************************************************************************/
 
+/************************ppmファイルを読み込む処理*********************************************************/
     void loadppm_P6(std::ifstream& file, int& imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color)
     {
         unsigned char c[20];
@@ -91,6 +93,157 @@ template <typename a> std::string arrayn(a out[], int const& num_array)
         }
 
         std::cout << "読み込み終了" << std::endl;
+    }
+
+
+    void loadppm(const std::string str, int& mode, int& imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color)
+    {
+        using namespace std::literals::string_literals;
+
+        std::ifstream file(str, std::ios::binary);
+
+        if(!file.is_open())
+        {
+            std::cout << str + "を開けなかった"s << std::endl;
+            exit(1);
+        }
+
+        std::cout << str + "の読み込み開始"s << std::endl;
+
+        unsigned char c[20];
+        int tokennum;
+
+
+        file.read(reinterpret_cast<char*>(c), 2);
+        mode = c[1] - '0';
+
+        if(c[0] != 'P')
+        {
+            std::cout << "ファイルが壊れている" << std::endl;
+            exit(1);
+        }
+
+        if((mode == 1) || (mode == 4))
+        {
+            std::cout << "このファイルはビットマップ形式なので非対応" << std::endl;
+            exit(1);
+        }
+        else if((mode == 2) || (mode == 5))
+        {
+            std::cout << "このファイルはモノクロ形式なので非対応" << std::endl;
+            exit(1);
+        }
+        else if((mode == 3) || (mode == 6))
+        {
+            if(mode == 3)
+            {
+
+                std::cout << "このファイルは文字形式(P3)で非対応" << std::endl;
+                exit(1);
+
+
+            }
+            if(mode == 6)
+            {
+                std::cout << "このファイルはP6" << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "ファイルが壊れている" << std::endl;
+        }
+
+
+        //画像の横幅情報を得る
+        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
+
+        if(tokennum > 0)
+        {
+            imagewidth = (int)strtol((char*)(c), NULL, 10);
+            std::cout << "横の画素数は" << imagewidth << std::endl;
+        }
+        else //エラー発生
+        {
+            std::cout << "エラー発生" << std::endl;
+            exit(1);
+        }
+        if(imagewidth == 0)
+        {
+            std::cout << "エラー発生" << std::endl;
+            exit(1);
+        }
+        //imagewidthが無事取得された
+
+        //画像の横幅情報を得る
+        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
+
+        if(tokennum > 0)
+        {
+            imageheight = (int)strtol((char*)(c), NULL, 10);
+            std::cout << "縦の画素数は" << imageheight << std::endl;
+        }
+        else //エラー発生
+        {
+            std::cout << "エラー発生" << std::endl;
+            exit(1);
+        }
+        if(imageheight == 0)
+        {
+            std::cout << "エラー発生" << std::endl;
+            exit(1);
+        }
+        //imageheightが無事取得された
+
+        
+
+
+        //画像の最大輝度を得る
+        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
+
+        if(tokennum > 0)
+        {
+            maxbrightness = (int)strtol((char*)(c), NULL, 10);
+        }
+        else //エラー発生
+        {
+            std::cout << "エラー発生" << std::endl;
+            exit(1);
+        }
+        if(maxbrightness != 255)
+        {
+            std::cout << "maxbrightnessが255でなく" << maxbrightness << std::endl;
+            exit(1);
+        }
+
+        std::shared_ptr <Vec3[]> col {new Vec3[imagewidth*imageheight]};//imagewidth, imageheightによって配列の大きさが確定する
+        color = std::move(col);                                         //
+
+        if((mode == 1) || (mode == 4))
+        {
+            exit(1);
+        }
+        else if((mode == 2) || (mode == 5))
+        {
+            exit(1);
+        }
+        else if((mode == 3) || (mode == 6))
+        {
+            if(mode == 3)
+            {
+                exit(1);
+
+
+            }
+            if(mode == 6)
+            {
+                loadppm_P6(file, imagewidth, imageheight, maxbrightness, color);
+            }
+        }
+        else
+        {
+            std::cout << "ファイルが壊れている" << std::endl;
+        }
+
     }
 /*****************************************************************************************************/
 
@@ -182,3 +335,103 @@ int kbhit(void)//何かキーが押されていれば1, 押されていなけれ
 
     return 0;
 }
+
+std::stringstream _0fill(int const& i, int const& digitnum)//数字の桁数(0を含む) が一定数になるように0を大きい位に追加する　例えば0001
+{
+    std::stringstream stream;//この時点では文字は入っていない
+    int n;//0を除く桁数を求める
+
+    if(i<0)
+    {
+        std::cout << "画像の番号が負の数であってはならない" << std::endl;
+        exit(1);
+    }
+
+    //画像の番号が0以上の整数なら
+
+
+    /*******0を除く桁数を求め, nに代入する******/
+        for(n = 1; ; n++)
+        {
+            if(i < exp10(n))
+            {
+                break;
+            }
+        }
+    /**************************************/
+    //nは0を除く桁数
+
+    /*******************0を除く部分の桁数がdigitnumより大きい場合*********************************/
+    if(digitnum < n)
+    {
+        std::cout << "0を除く部分の桁数が指定された桁数" << digitnum << "を超えた" << std::endl;
+        exit(1);
+    }
+    /***************************************************************************************/
+
+
+    /***********0でdigitnum-n個埋める******************/
+        for(int j = 0; j<(digitnum-n); j++)//0を埋める
+        {
+            stream << '0';
+        }
+    /************************************************/
+
+    return stream;
+}
+
+
+#define digitnum_image 4
+void Output_To_Ppm(std::string str, Vec3* data, int width, int height, const int &i) //ppm画像を1つ出力
+{
+    using namespace std::literals::string_literals;
+
+    std::cout << "▼書き込み開始▼" << std::endl; //表示
+    std::cout << "ファイル名は" << "image-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s << std::endl;
+
+
+    std::ofstream file("image-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s, std::ios::binary); //ファイル名を設定してファイルを作成
+
+    /******************バグ回避**********************************/
+        if(!file.is_open())
+        {
+            std::cout << "ファイルを作成できなかった" << std::endl;
+            exit(1);
+        }
+    /**********************************************************/
+
+    char c[10];//配列
+    int n1, n2;//文字数を格納する
+
+    /*************************ppmファイルの先頭の文字列を書き込む*************************************************/
+        c[0] = 'P'; c[1] = '6'; c[2] = '\n';
+        file.write(c, 3);                                   //書き込む "P6\n"
+
+        n1 = sprintf(c, "%d", width);  c[n1] = ' ';  n2 = sprintf(c + n1 + 1, "%d", height);  c[n1+n2+1] = '\n';
+        file.write(c, n1+n2+2);                             //書き込む "width height\n"
+
+        n1 = sprintf(c, "%d", 255); c[n1] = '\n';
+        file.write(c, n1+1);                                 //書き込む "255\n"
+    /********************************************************************************************************/
+
+    /***************************RGBを書き込む****************************************************************/
+        for (int j = 0; j < height; j++) //ppmへの書き込み
+        {
+            for (int i = 0; i < width; i++)
+            {
+                c[0] = (int)(data[width * j + i]).x;  c[1] = (int)(data[width * j + i]).y;  c[2] = (int)(data[width * j + i]).z;
+
+                file.write(c, 3);  //色を書き込む
+            }
+
+            std::cout << (100 * (j+1) / height) << '%' << "\r" << std::flush; //進行状況を表示
+
+        }
+    /********************************************************************************************************/
+    file.close(); //ファイルを閉じる
+
+    std::cout << "▲書き込み終了▲" << std::endl; //表示
+}
+#undef digitnum_image
+
+
