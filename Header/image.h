@@ -2,7 +2,7 @@
 #define IMAGE_H
 
 #include <string>
-#define threadsum 8
+#define threadsum 7
 
 #include "camera.h"
 #include "sky.h"
