@@ -1,6 +1,7 @@
 #ifndef RAY_H
 #define RAY_H
 
+#include <opencv2/opencv.hpp>
 #include "vec.h"
     
 

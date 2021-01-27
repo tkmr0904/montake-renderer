@@ -1,5 +1,6 @@
 #include "../Header/image.h"
 
+using namespace std::literals::string_literals;
 
 void hour_mimnute_second(double const& seconds, int& hour, int& minute, double& second)//第1引数の秒数から 何時間(整数), 何分(整数), 何秒(小数), をhour, minute, second に代入する
 {
@@ -1027,46 +1028,21 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
         std::cout << "▼書き込み開始▼" << std::endl; //表示
         std::cout << "ファイル名は" << "image-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s << std::endl;
 
-
-        std::ofstream file("image-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s, std::ios::binary); //ファイル名を設定してファイルを作成
-
-        /******************バグ回避**********************************/
-            if(!file.is_open())
-            {
-                std::cout << "ファイルを作成できなかった" << std::endl;
-                exit(1);
-            }
-        /**********************************************************/
-
-        char c[10];//配列
-        int n1, n2;//文字数を格納する
-
-        /*************************ppmファイルの先頭の文字列を書き込む*************************************************/
-            c[0] = 'P'; c[1] = '6'; c[2] = '\n';
-            file.write(c, 3);                                   //書き込む "P6\n"
-
-            n1 = sprintf(c, "%d", width);  c[n1] = ' ';  n2 = sprintf(c + n1 + 1, "%d", height);  c[n1+n2+1] = '\n';
-            file.write(c, n1+n2+2);                             //書き込む "width height\n"
-
-            n1 = sprintf(c, "%d", 255); c[n1] = '\n';
-            file.write(c, n1+1);                                 //書き込む "255\n"
-        /********************************************************************************************************/
-
         /***************************RGBを書き込む****************************************************************/
+            cv::Mat img = cv::Mat::zeros(cv::Size(width,height), CV_8UC3);
+
             for (int j = 0; j < height; j++) //ppmへの書き込み
             {
                 for (int i = 0; i < width; i++)
                 {
-                    c[0] = (int)(data_temp[width * j + i]).x;  c[1] = (int)(data_temp[width * j + i]).y;  c[2] = (int)(data_temp[width * j + i]).z;
-
-                    file.write(c, 3);  //色を書き込む
+                    img.at<cv::Vec3b>(j, i)[2] = (int)(data_temp[width * j + i]).x;
+                    img.at<cv::Vec3b>(j, i)[1] = (int)(data_temp[width * j + i]).y;
+                    img.at<cv::Vec3b>(j, i)[0] = (int)(data_temp[width * j + i]).z;
                 }
-
-                std::cout << (100 * (j+1) / height) << '%' << "\r" << std::flush; //進行状況を表示
-
             }
+
+            cv::imwrite("image-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s, img); //ファイル名を設定してファイルを作成
         /********************************************************************************************************/
-        file.close(); //ファイルを閉じる
 
         std::cout << "▲書き込み終了▲" << std::endl; //表示
     }
@@ -1075,32 +1051,9 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
     {
         std::cout << "▼書き込み開始▼" << std::endl; //表示
 
-        std::ofstream file("Over255-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s, std::ios::binary); //ファイル名を設定してファイルを作成
-
-
-        /******************バグ回避**********************************/
-            if(!file.is_open())
-            {
-                std::cout << "ファイルを作成できなかった" << std::endl;
-                exit(1);
-            }
-        /**********************************************************/
-
-        char c[10];//配列
-        int n1, n2;//文字数を格納する
-
-        /*************************ppmファイルの先頭の文字列を書き込む*************************************************/
-            c[0] = 'P'; c[1] = '6'; c[2] = '\n';
-            file.write(c, 3);                                   //書き込む "P6\n"
-
-            n1 = sprintf(c, "%d", width);  c[n1] = ' ';  n2 = sprintf(c + n1 + 1, "%d", height);  c[n1+n2+1] = '\n';
-            file.write(c, n1+n2+2);                             //書き込む "width height\n"
-
-            n1 = sprintf(c, "%d", 255); c[n1] = '\n';
-            file.write(c, n1+1);                                 //書き込む "255\n"
-        /*******************************************************************************************************/
-
         /***************************RGBを書き込む****************************************************************/
+            cv::Mat img = cv::Mat::zeros(cv::Size(width,height), CV_8UC3);
+
             for (int j = 0; j < height; j++) //ppmへの書き込み
             {
                 for (int i = 0; i < width; i++)
@@ -1108,31 +1061,25 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
                     /*************RGBのうちに255以上の値があれば白色, 全てが240未満なら黒色, 最も明るい色が240以上255未満なら青色を出力する*******/
                         if((data_temp[width * j + i]) < Vec3(240,240,240))//rgbが240未満なら
                         {
-                            c[0] = c[1] = c[2] = 0;
+                            img.at<cv::Vec3b>(j, i)[2] = img.at<cv::Vec3b>(j, i)[1] = img.at<cv::Vec3b>(j, i)[0] = 0;
                         }
                         else if(data_temp[width * j + i] < Vec3(255,255,255))//rgbが240以上かつ255未満なら
                         {
-                            c[0] = c[1] = 0;  c[2] = 255;
+                            img.at<cv::Vec3b>(j, i)[2] = img.at<cv::Vec3b>(j, i)[1] = 0;  img.at<cv::Vec3b>(j, i)[0] = 255;
                         }
                         else//rgbが255以上なら
                         {
-                            c[0] = c[1] = c[2] = 255;
+                            img.at<cv::Vec3b>(j, i)[2] = img.at<cv::Vec3b>(j, i)[1] = img.at<cv::Vec3b>(j, i)[0] = 255;
                         }
                     /***************************************************************************************************************/
-
-                    file.write(c, 3);  //色を書き込む
                 }
-
-                std::cout << (100 * (j + 1) / height) << '%' << "\r" << std::flush; //進行状況を表示
             }
+
+            cv::imwrite("Over255-"s + _0fill(i, digitnum_image).str() + std::to_string(i) + ".ppm"s, img); //ファイル名を設定してファイルを作成
         /******************************************************************************************************/
-
-        file.close(); //ファイルを閉じる
-
         std::cout << "▲書き込み終了▲" << std::endl; //表示
     }
 
-    #undef digitnum_image
 
     void Image::CalculateSD_average(double const& a_) const
     {
@@ -1422,12 +1369,14 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
     {
         std::cout << "▼SDデータの書き込み開始▼" << std::endl; //表示
 
-        writeSD_to_ppm("SDx" + std::to_string(i), 0);
-        writeSD_to_ppm("SDy" + std::to_string(i), 1);
-        writeSD_to_ppm("SDz" + std::to_string(i), 2);
+        writeSD_to_ppm("SDx" + _0fill(i, digitnum_image).str() + std::to_string(i), 0);
+        writeSD_to_ppm("SDy" + _0fill(i, digitnum_image).str() + std::to_string(i), 1);
+        writeSD_to_ppm("SDz" + _0fill(i, digitnum_image).str() + std::to_string(i), 2);
 
         std::cout << "▲書き込み終了▲" << std::endl; //表示
     }
+
+    #undef digitnum_image
 
     void Image::writeSD_to_ppm(std::string const& name, int const& num) const//numが0, 1, 2の場合それぞれx, y, zを表す
     {
@@ -1439,46 +1388,19 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
             exit(1);
         }
 
-        std::ofstream file(name + ".ppm"s, std::ios::binary);          //ファイル名を設定してファイルを作成
-
-
-        /****************バグ回避********************************/
-            if(!file.is_open())
-            {
-                std::cout << "ファイルを作成できなかった" << std::endl;
-                exit(1);
-            }
-        /*******************************************************/
-
-        char c[10]; 
-        int n1, n2;
-
-        /*************************ppmファイルの先頭の文字列を書き込む*************************************************/
-            c[0] = 'P'; c[1] = '6'; c[2] = '\n';
-            file.write(c, 3);                                   //書き込む "P6\n"
-
-            n1 = sprintf(c, "%d", width);  c[n1] = ' ';  n2 = sprintf(c + n1 + 1, "%d", height);  c[n1+n2+1] = '\n';
-            file.write(c, n1+n2+2);                             //書き込む "width height\n"
-
-            n1 = sprintf(c, "%d", 255); c[n1] = '\n';
-            file.write(c, n1+1);                                 //書き込む "255\n"
-        /********************************************************************************************************/
-
-
         /***************************RGBを書き込む****************************************************************/
+            cv::Mat img = cv::Mat::zeros(cv::Size(width,height), CV_8U);
+
             for (int j = 0; j < height; j++) //ppmへの書き込み
             {
                 for (int i = 0; i < width; i++)
                 {
-                    c[0] = c[1] = c[2] = (int)(data_temp[width * j + i].a[num]);
-                    
-                    file.write(c, 3);
+                    img.at<uchar>(j, i) = (int)(data_temp[width * j + i].a[num]);
                 }
-                std::cout << (100 * (j + 1) / height) << '%' << "\r" << std::flush; //進行状況を表示
             }
-        /*******************************************************************************************************/
 
-        file.close(); //ファイルを閉じる
+            cv::imwrite(name + ".pgm"s, img); //ファイル名を設定してファイルを作成
+        /*******************************************************************************************************/
 
         std::cout << "RGB"[num] << "終了" << std::endl; //numの値によってR, G, Bを決める
     }

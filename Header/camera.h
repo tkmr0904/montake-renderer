@@ -3,7 +3,7 @@
 
 #include "hit.h"
 
-#define RAY_MAX 100000//視線, 光線サブパスのそれぞれの個数の最大数
+#define RAY_MAX 10000//視線, 光線サブパスのそれぞれの個数の最大数
 
 class Camera
 {

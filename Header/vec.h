@@ -12,7 +12,7 @@
 #include <string>
 #include <unistd.h>
 #include "rand.h"
-using namespace std::literals::string_literals;
+
 #define _d_ exp10(-10)
 
 
