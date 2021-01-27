@@ -7,6 +7,13 @@
         "limits": "cpp",
         "sstream": "cpp",
         "utility": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "functional": "cpp",
+        "iomanip": "cpp",
+        "istream": "cpp",
+        "ratio": "cpp",
+        "streambuf": "cpp"
     }
 }
