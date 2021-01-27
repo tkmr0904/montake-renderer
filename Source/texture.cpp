@@ -3,224 +3,62 @@
 using namespace std::literals::string_literals;
 
 /**************************ppmファイル(画像)の読み込みに関する処理***********************************************************************/
-    int nexttoken(std::ifstream& file, unsigned char c[], int arraynum)//戻り値は文字数 見つからなかった場合は0
+    void loadppm(const std::string str, int& imagewidth, int& imageheight,  std::shared_ptr<Vec3[]>& color, int& channel, int& depth)
     {
-        int i;
+        std::cout << str + "の読み込み開始"s << std::endl;
 
+        cv::Mat img = cv::imread(str);
 
-        while(1)//見つからない限り続ける
+        if(img.empty())
         {
-            file.read(reinterpret_cast<char*>(c), 1);//読み込む
+            std::cout << "画像が正しく読み込まれなかった" << std::endl;
+            exit(1);
+        }
 
-            if(file.eof() == 1)//ファイル終端の1つ先を読み込んだ
-            {
-                return 0;//見つからなかった
-            }
-            else if((c[0] != ' ') && (c[0] != '\n'))//ファイル内のデータを読み込んで文字は改行空白以外の文字だった
-            {
-                break;//見つかった 
-            }
+        int type = img.type();
+        channel = (type/8) + 1;
+
+        if(type%8<=1)
+        {
+            depth = 8;
+        }
+        else if((2<=type%8) && (type%8<=3))
+        {
+            depth = 16;
+        }
+        else if((4<=type%8) && (type%8<=5))
+        {
+            depth = 32;
+        }
+        else
+        {
+            depth = 64;
         }
 
 
-        //見つかった場合
-        
 
-        for(i = 1; i < arraynum; i++)//何個先まで格納されているか調べる
-        {
+        imageheight = img.rows;
+        imagewidth  = img.cols;
 
-            file.read(reinterpret_cast<char*>(c+i), 1);//読み込む
-            if((c[i] == ' ') || (c[i] == '\n'))//文字は改行か空白だった
-            {
-                c[i] = '\0';
-                return i;//i個の文字列を発見した
-            }
-        }
-        //配列の全てが改行空白以外の文字で埋まった
-        std::cout << "配列が短すぎる" << std::endl;
-        exit(1);
-    }
+        std::cout << "横の画素数は" << imagewidth << std::endl;
+        std::cout << "縦の画素数は" << imageheight << std::endl;
+        std::cout << "画像のチャンネル数は" << channel << std::endl;
+        std::cout << "画像のビット深度は" << depth << std::endl;
 
-    void loadppm_P6(std::ifstream& file, int& imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color)
-    {
-        unsigned char c[20];
-        
+        std::shared_ptr <Vec3[]> col {new Vec3[(long)imagewidth*imageheight]};//imagewidth, imageheightによって配列の大きさが確定する
+        color = std::move(col);                                               //
+
         for(int j = 0; j<imageheight; j++)
         {
             for(int i = 0; i<imagewidth; i++)
             {
-                file.read(reinterpret_cast<char*>(c), 3);
-
-
-                if(file.eof() == 1)
-                {
-                    std::cout << "ファイルの終端を過ぎてしまった" << std::endl;
-                    exit(1);
-                }
-                //ファイルの終端でなければ
-                color[(long)imagewidth*j + i].x = ((int)c[0])/255.0;
-                color[(long)imagewidth*j + i].y = ((int)c[1])/255.0;
-                color[(long)imagewidth*j + i].z = ((int)c[2])/255.0;                                                                                
-            }
-            std::cout << (100 * j / imageheight) << '%' << "\r" << std::flush; //進行状況を表示
-        }
-        file.close();
-
-        if(file.is_open())
-        {
-            std::cout << "ファイルを閉じることができなかった"s << std::endl;
-            exit(1);
-        }
-
-        std::cout << "読み込み終了" << std::endl;
-    }
-
-    void loadppm(const std::string str, int& mode, int& imagewidth, int& imageheight, int& maxbrightness,  std::shared_ptr<Vec3[]>& color)
-    {
-        std::ifstream file(str, std::ios::binary);
-
-        if(!file.is_open())
-        {
-            std::cout << str + "を開けなかった"s << std::endl;
-            exit(1);
-        }
-
-        std::cout << str + "の読み込み開始"s << std::endl;
-
-        unsigned char c[20];
-        int tokennum;
-
-
-        file.read(reinterpret_cast<char*>(c), 2);
-        mode = c[1] - '0';
-
-        if(c[0] != 'P')
-        {
-            std::cout << "ファイルが壊れている" << std::endl;
-            exit(1);
-        }
-
-        if((mode == 1) || (mode == 4))
-        {
-            std::cout << "このファイルはビットマップ形式なので非対応" << std::endl;
-            exit(1);
-        }
-        else if((mode == 2) || (mode == 5))
-        {
-            std::cout << "このファイルはモノクロ形式なので非対応" << std::endl;
-            exit(1);
-        }
-        else if((mode == 3) || (mode == 6))
-        {
-            if(mode == 3)
-            {
-
-                std::cout << "このファイルは文字形式(P3)で非対応" << std::endl;
-                exit(1);
-
-
-            }
-            if(mode == 6)
-            {
-                std::cout << "このファイルはP6" << std::endl;
+                color[(long)imagewidth*j + i].a[0] = img.at<cv::Vec3b>(j, i)[2]/255.0;
+                color[(long)imagewidth*j + i].a[1] = img.at<cv::Vec3b>(j, i)[1]/255.0;
+                color[(long)imagewidth*j + i].a[2] = img.at<cv::Vec3b>(j, i)[0]/255.0;
             }
         }
-        else
-        {
-            std::cout << "ファイルが壊れている" << std::endl;
-        }
 
-
-        //画像の横幅情報を得る
-        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
-
-        if(tokennum > 0)
-        {
-            imagewidth = (int)strtol((char*)(c), NULL, 10);
-            std::cout << "横の画素数は" << imagewidth << std::endl;
-        }
-        else //エラー発生
-        {
-            std::cout << "エラー発生" << std::endl;
-            exit(1);
-        }
-        if(imagewidth == 0)
-        {
-            std::cout << "エラー発生" << std::endl;
-            exit(1);
-        }
-        //imagewidthが無事取得された
-
-        //画像の横幅情報を得る
-        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
-
-        if(tokennum > 0)
-        {
-            imageheight = (int)strtol((char*)(c), NULL, 10);
-            std::cout << "縦の画素数は" << imageheight << std::endl;
-        }
-        else //エラー発生
-        {
-            std::cout << "エラー発生" << std::endl;
-            exit(1);
-        }
-        if(imageheight == 0)
-        {
-            std::cout << "エラー発生" << std::endl;
-            exit(1);
-        }
-        //imageheightが無事取得された
-
-        
-
-
-        //画像の最大輝度を得る
-        tokennum = nexttoken(file, c, sizeof(c)/sizeof(c[0]));
-
-        if(tokennum > 0)
-        {
-            maxbrightness = (int)strtol((char*)(c), NULL, 10);
-        }
-        else //エラー発生
-        {
-            std::cout << "エラー発生" << std::endl;
-            exit(1);
-        }
-        if(maxbrightness != 255)
-        {
-            std::cout << "maxbrightnessが255でなく" << maxbrightness << std::endl;
-            exit(1);
-        }
-
-        std::shared_ptr <Vec3[]> col {new Vec3[imagewidth*imageheight]};//imagewidth, imageheightによって配列の大きさが確定する
-        color = std::move(col);                                         //
-
-        if((mode == 1) || (mode == 4))
-        {
-            exit(1);
-        }
-        else if((mode == 2) || (mode == 5))
-        {
-            exit(1);
-        }
-        else if((mode == 3) || (mode == 6))
-        {
-            if(mode == 3)
-            {
-                exit(1);
-
-
-            }
-            if(mode == 6)
-            {
-                loadppm_P6(file, imagewidth, imageheight, maxbrightness, color);
-            }
-        }
-        else
-        {
-            std::cout << "ファイルが壊れている" << std::endl;
-        }
-
+        std::cout << str + "の読み込み完了"s << std::endl;
     }
 /******************************************************************************************************************************/
 
@@ -1001,7 +839,7 @@ namespace M     //MaterialのM
 
         Picture_sphere::Picture_sphere(const std::string str):str(str)
         {
-            loadppm(str, mode, imagewidth, imageheight, maxbrightness, color);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
+            loadppm(str, imagewidth, imageheight, color, channel, depth);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
 
             if(imagewidth != 2*imageheight)//縦と横の画素数の比が1対2でないものを受け付けない
             {
@@ -1057,7 +895,7 @@ namespace M     //MaterialのM
     /*********Picture_pipe**********************************************************/
         Picture_pipe::Picture_pipe(const std::string str): str(str)
         {
-            loadppm(str, mode, imagewidth, imageheight, maxbrightness, color); //画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
+            loadppm(str, imagewidth, imageheight, color, channel, depth); //画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
         }
 
         std::shared_ptr<Material> Picture_pipe::getmaterial(double const & phi, double const & z)const//phi: 円筒の側面をぐるっと回る角度  //z: 円筒の底面からの高さを0から1に正規化したもの
@@ -1109,7 +947,7 @@ namespace M     //MaterialのM
 
         Picture_disk::Picture_disk(const std::string str): str(str)//ここでは画像の縦と横の画素数が同じもの以外受け付けない
         {
-            loadppm(str, mode, imagewidth, imageheight, maxbrightness, color);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
+            loadppm(str, imagewidth, imageheight, color, channel, depth);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
             if(imagewidth != imageheight)//縦と横の画素数が異なるものを受け付けない
             {
                 std::cout << "縦と横が違う" << '(' << str << ')' << std::endl;
@@ -1147,7 +985,7 @@ namespace M     //MaterialのM
             //座標が画像の範囲を超えなければ
 
             /****************戻り値のmaterialを求める******************************************************/
-                if(color[imagewidth*j + i] < Vec3(0.5,0.5,0.5))
+                if(color[(long)imagewidth*j + i] < Vec3(0.5,0.5,0.5))
                 {
                     return std::make_shared<Diffuse>(Diffuse(Vec3(1,1,1)));//衝突点をDiffuseとする
                 }
@@ -1168,7 +1006,7 @@ namespace M     //MaterialのM
     /*********Picture_rectangle*****************************************************/
         Picture_rectangle::Picture_rectangle(const std::string str): str(str)
         {
-            loadppm(str, mode, imagewidth, imageheight, maxbrightness, color);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
+            loadppm(str, imagewidth, imageheight, color, channel, depth);//画像のファイル名をstrで受け取り, その名前の画像の色データを0から1になるように正規化してcolorに格納する
         }
 
         std::shared_ptr<Material> Picture_rectangle::getmaterial(double const& x, double const& y)const
@@ -1201,7 +1039,7 @@ namespace M     //MaterialのM
             }
             /**************************************************/
             
-            return std::make_shared<Diffuse>(Diffuse(color[j*imagewidth + i]));
+            return std::make_shared<Diffuse>(Diffuse(color[(long)j*imagewidth + i]));
         }
 
         int Picture_rectangle::patternnum ()const//どんな種類のShapesで使えるか
