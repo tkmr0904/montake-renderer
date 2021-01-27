@@ -184,7 +184,7 @@ void setobjects(Objects& objects)//物体の情報をobjectsに書き込む
         M::sharePattern q16 =  M::pColorful_disk();
         M::sharePattern q17 =  M::pColorful_triangle();
         M::sharePattern q18 =  M::pColorful_sphere();
-        //M::sharePattern q19 =  M::pPicture_sphere("../Photo/moon2.ppm");
+        M::sharePattern q19 =  M::pPicture_sphere("../Photo/moon2.png");
         //M::sharePattern q20 = share(M::Picture_disk, M::Picture_disk("../Photo/clock.ppm"));
         M::sharePattern q21 =  M::pPicture_rectangle("../Photo/a.ppm");
     /***************************************************************************************/
@@ -204,10 +204,10 @@ void setobjects(Objects& objects)//物体の情報をobjectsに書き込む
         objects.addshape(share(Pipe, Pipe(20, Vec3(0,0,100), Vec3(0,0,3), 0, r2, q2)));
         objects.addshape(share(Pipe, Pipe(20, Vec3(100,0,50), Vec3(-3,0,0), 0, r2, q2)));
         objects.addshape(share(Disk, Disk(20, Vec3(100-3,0,50), M_PI*1, M_PI*0.5, M_PI*0,  r2, q2)));
-    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(0, 30*2/sqrt(3),-70), r2, q10)));
-    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(-30,-30  /sqrt(3),-70), r2, q10)));
-    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(30,-30  /sqrt(3),-70), r2, q10)));
-    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(0,0,-70+30*sqrt(8/3)), r2, q10)));
+    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(0, 30*2/sqrt(3),-70), r2, q19)));
+    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(-30,-30  /sqrt(3),-70), r2, q19)));
+    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(30,-30  /sqrt(3),-70), r2, q19)));
+    objects.addshape(share(Sphere, Sphere(30, 0, M_PI*1, 0, Vec3(0,0,-70+30*sqrt(8/3)), r2, q19)));
         //objects.addshape(share(Pipe, Pipe(40, Vec3(0,0,100), Vec3(0,0,5), 0, Vec3(0,0,0), q2)));
     //objects.addshape(share(Cuboid, Cuboid(70,70,70, Vec3(0,0,0), 0,0,0, r2, r2, r2, r2, r2, r2, q10, q10, q10, q10, q10, q10)));
             //objects.addshape(share(Sphere,Sphere(60, 0, 0, 0, Vec3(0,0,-10), r2, q10)));
