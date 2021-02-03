@@ -6,4 +6,4 @@ project(raytracing CXX)
 set(CMAKE_CXX_FLAGS "-Wall -O3 -flto -pthread")
 
 # サブディレクトリを登録
-add_subdirectory(Source)
+add_subdirectory(./src)
