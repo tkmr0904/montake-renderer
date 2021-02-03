@@ -1,4 +1,4 @@
-#include "../Header/rand.h"
+#include "../include/rand.h"
 
 /*************これは実装を定義するため以外に必要ないのでcppに書く*********************/
 #include <random>

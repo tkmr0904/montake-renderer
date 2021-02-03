@@ -1,4 +1,4 @@
-#include "../Header/image.h"
+#include "../include/image.h"
 
 using namespace std::literals::string_literals;
 

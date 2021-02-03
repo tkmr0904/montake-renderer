@@ -1,6 +1,6 @@
 #include <iostream>
 #include <math.h>
-#include "../Header/draw.h"
+#include "../include/draw.h"
 
 
 #define   share(a,b)  std::make_shared<a>(b) //a: 型名,  b: オブジェクト ShapeをObjectsに追加するときに便利

@@ -1,4 +1,4 @@
-#include "../Header/hit.h"
+#include "../include/hit.h"
 
 double const hitdistance0 = 1000000000000000000;//様々なcppファイルでconstの数値を用いてそれらを分割コンパイルしたいが,ヘッターに数値の定義を書きたくない...   そのような場合にはextern宣言をヘッダーに書いてcppにインクルードさせ, 1つのcppで数値を定義すれば良い
 

@@ -1,6 +1,6 @@
 #include <thread>
 #include <errno.h>
-#include "../Header/image.h"
+#include "../include/image.h"
 
 /*テンプレート関数の定義はヘッダーに書くべし(コンパイル時に完全な関数が作られていなければならないため, 後でリンクすることができない)*/
 template<typename Out> void input(Out const& out, double& parameter)//outを表示してから parameterにdouble型を入力する
