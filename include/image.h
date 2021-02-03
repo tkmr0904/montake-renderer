@@ -11,8 +11,8 @@
 
 void hour_mimnute_second(double  const& seconds,    int      & hour    ,    int   & minute,     double& second );
 std::stringstream _0fill(int     const& i      ,    int const& digitnum                                        );
-void getfirstray_light  (Ray          & ray    ,    Hit      & hit     ,    double& pdflast                    );
 void getnextray_eye     (Ray          & ray    ,    Hit      & hit     ,    Hit   & prehit,     double& pdflast);
+void getfirstray_light  (Ray          & ray    ,    Hit      & hit     ,    double& pdflast                    );
 void getnextray_light   (Ray          & ray    ,    Hit      & hit     ,    Hit   & prehit,     double& pdflast);
 void getposition_nee    (Objects const& objects,    Hit      & hit);
 
