@@ -1,7 +1,7 @@
-#include "../Header/sky.h"
+#include "../include/sky.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../Header/stb_image.h"//こうすることで定義の重複を避けることができる
+#include "../include/stb_image.h"//こうすることで定義の重複を避けることができる
 
 /***********UniformSkyの実装****************************************/
 

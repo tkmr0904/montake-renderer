@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <sstream>
-#include "../Header/vec.h"
+#include "../include/vec.h"
 
 template <typename a> std::string arrayn(a out[], int const& num_array)
 {

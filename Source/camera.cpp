@@ -1,4 +1,4 @@
-#include "../Header/camera.h"
+#include "../include/camera.h"
 
 /*************PinholeCameraの実装*******************************************************************************************************************************************/
     PinholeCamera::PinholeCamera(int const& _width, int const& _height, Vec3 const& camPos, double const& alpha, double const& theta, double const& phi, double const& holedistance, double const& holearea, double const& sensorsensitivity):width(_width), height(_height), camPos(camPos), alpha(alpha), theta(theta), phi(phi), holedistance(holedistance), holearea(holearea), sensorsensitivity(sensorsensitivity)
