@@ -53,6 +53,26 @@ std::stringstream _0fill(int const& i, int const& digitnum)//数字の桁数(0�
     return stream;
 }
 
+void getnextray_eye(Ray& ray, Hit& hit, Hit& prehit, double& pdflast)//wiが入射し, woが発射する
+{
+    Vec3 wi, wo, s, t;
+    Vec3 nextdirection;//wiをワールド座標に直したもの
+    Vec3 nextdirection_1;//単位ベクトルにしたもの
+
+    orthonormalbasis(hit.hitnormal, s, t);       //正規直行系を得る
+    wo = world_to_local(ray.direction, s, t, hit.hitnormal);     //入射rayのローカル座標の方向を得る
+    hit.BSDF = hit.hitmaterial->sample_eye(wi, wo, pdflast);      //hitnormalの方向によってwo.zが正の値になったり負の値になったりすることを忘れずに        //ローカル座標のwiとpdfを得る
+    hit.cos_out = std::abs(costheta(wi)); //wiが求まったのでcosの値を得る
+
+    prehit.pdf_reverse = hit.hitmaterial->getpdf_light(-1*wi, -1*wo) / prehit.cos_out * (hit.hitdistance * hit.hitdistance);
+
+    nextdirection =  local_to_world(wi, s, t, hit.hitnormal);//次のrayの方向を取り敢えず格納する wiをワールド座標に直したもの
+    nextdirection_1 = normalize(nextdirection);//単位ベクトルを求める
+
+
+    ray = Ray(hit.hitpos + nextdirection_1 * _d_ , nextdirection); //ワールド座標を得る   (少し衝突面から離す)
+}
+
 void getfirstray_light(Ray& ray, Hit& hit, double& pdflast)//光源から発射される最初の光線rayを得る, ついでにhitLe, BSDF, cos_out, pdflastを求める
 {
     Vec3 s, t;
@@ -74,26 +94,6 @@ void getfirstray_light(Ray& ray, Hit& hit, double& pdflast)//光源から発射�
     firstdirection_1 = normalize(firstdirection);
 
     ray = Ray(hit.hitpos + firstdirection_1 * _d_ , firstdirection); //ワールド座標を得る   (少し衝突面から離す)
-}
-
-void getnextray_eye(Ray& ray, Hit& hit, Hit& prehit, double& pdflast)//wiが入射し, woが発射する
-{
-    Vec3 wi, wo, s, t;
-    Vec3 nextdirection;//wiをワールド座標に直したもの
-    Vec3 nextdirection_1;//単位ベクトルにしたもの
-
-    orthonormalbasis(hit.hitnormal, s, t);       //正規直行系を得る
-    wo = world_to_local(ray.direction, s, t, hit.hitnormal);     //入射rayのローカル座標の方向を得る
-    hit.BSDF = hit.hitmaterial->sample_eye(wi, wo, pdflast);      //hitnormalの方向によってwo.zが正の値になったり負の値になったりすることを忘れずに        //ローカル座標のwiとpdfを得る
-    hit.cos_out = std::abs(costheta(wi)); //wiが求まったのでcosの値を得る
-
-    prehit.pdf_reverse = hit.hitmaterial->getpdf_light(-1*wi, -1*wo) / prehit.cos_out * (hit.hitdistance * hit.hitdistance);
-
-    nextdirection =  local_to_world(wi, s, t, hit.hitnormal);//次のrayの方向を取り敢えず格納する wiをワールド座標に直したもの
-    nextdirection_1 = normalize(nextdirection);//単位ベクトルを求める
-
-
-    ray = Ray(hit.hitpos + nextdirection_1 * _d_ , nextdirection); //ワールド座標を得る   (少し衝突面から離す)
 }
 
 void getnextray_light(Ray& ray, Hit& hit, Hit& prehit, double& pdflast)//wiが入射し, woが発射する    rayの方向を求め, pdflast(rayの方向に関する確率密度関数)も求める, cos_out, BSDF, 前のpdf_reverseも求める
