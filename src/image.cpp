@@ -171,6 +171,8 @@ void getposition_nee(Objects const& objects, Hit& hit)//hit.hitpos, hit.hitnorma
         {
             addednum_each[i] = 0;//最初は0を代入する
         }
+
+        samplecounter = new long[threadsum];
     }
 
     Image::~Image()
