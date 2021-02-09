@@ -1,4 +1,3 @@
-#include <thread>
 #include <errno.h>
 #include "../include/image.h"
 
