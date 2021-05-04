@@ -1,6 +1,8 @@
+#define TINYOBJLOADER_IMPLEMENTATION
 #include <iostream>
 #include <math.h>
 #include "../include/draw.h"
+#include "tiny_obj_loader.h"
 
 
 #define   share(a,b)  std::make_shared<a>(b) //a: 型名,  b: オブジェクト ShapeをObjectsに追加するときに便利
@@ -81,7 +83,9 @@ int main(int argc,char *argv[])
                     );
     /***********************************************************************/
 
-    for(int i = 0; i <= 0; i++)//複数画像を描画する
+
+
+    for(int i = 0; i < 0; i++)//複数画像を描画する
     {
         
 
@@ -237,5 +241,7 @@ int main(int argc,char *argv[])
         draw( i , image, camera, sky, objects, auto_);//画像を1つ描画する
         // ファイル番号 
     }
+
+    tinyobj::attrib_t attrib;
 
 }
